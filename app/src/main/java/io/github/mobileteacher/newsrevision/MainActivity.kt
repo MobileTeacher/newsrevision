@@ -3,7 +3,10 @@ package io.github.mobileteacher.newsrevision
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import io.github.mobileteacher.newsrevision.api.RetrofitProvider
 import io.github.mobileteacher.newsrevision.models.NewsResponseObject
@@ -14,11 +17,16 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var newsViewModel: NewsViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        newsViewModel = ViewModelProviders.of(this)
+                            .get(NewsViewModel::class.java)
+
         setupRecyclerView()
+        subscribe()
     }
 
     private fun setupRecyclerView(){
@@ -29,32 +37,27 @@ class MainActivity : AppCompatActivity() {
         news_list.layoutManager = StaggeredGridLayoutManager(columns,
             StaggeredGridLayoutManager.VERTICAL)//LinearLayoutManager(this)
         news_list.adapter = NewsAdapter()
-        getData()
+        newsViewModel.getData()
     }
 
-    private fun getData(){
-        val call = RetrofitProvider.newsAPI.getAllNews()
-        call.enqueue(object : Callback<NewsResponseObject>{
-            override fun onFailure(call: Call<NewsResponseObject>, t: Throwable) {
-                Toast.makeText(this@MainActivity,
-                    "Deu ruim: ${t.message}",
-                    Toast.LENGTH_SHORT).show()
-            }
+    private fun subscribe(){
+        newsViewModel.errorMessage.observe(this, Observer {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        })
 
-            override fun onResponse(call: Call<NewsResponseObject>,
-                                    response: Response<NewsResponseObject>) {
-                if (response.isSuccessful){
-                    response.body()?.let {newsResponseObject->
-                        val adapter = news_list.adapter as? NewsAdapter
-                        adapter?.setData(newsResponseObject.news)
-                    }
-                } else {
-                    Toast.makeText(this@MainActivity,
-                        "Deu ruim, fale com o admin",
-                        Toast.LENGTH_SHORT).show()
-                }
-            }
+        newsViewModel.newsList.observe(this, Observer {list->
+            val adapter = news_list.adapter as? NewsAdapter
+            adapter?.setData(list)
+        })
 
+        newsViewModel.isLoading.observe(this, Observer {
+            if (it){
+                progressBar.visibility = View.VISIBLE
+            } else {
+                progressBar.visibility = View.GONE
+            }
         })
     }
+
+
 }
