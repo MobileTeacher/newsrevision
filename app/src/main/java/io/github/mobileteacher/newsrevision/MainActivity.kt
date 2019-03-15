@@ -1,5 +1,6 @@
 package io.github.mobileteacher.newsrevision
 
+import android.content.Intent
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -27,6 +28,13 @@ class MainActivity : AppCompatActivity() {
 
         setupRecyclerView()
         subscribe()
+        setupListeners()
+    }
+
+    private fun setupListeners(){
+        floatingActionButton.setOnClickListener {
+            startActivity(Intent(this, AddNewsActivity::class.java))
+        }
     }
 
     private fun setupRecyclerView(){
