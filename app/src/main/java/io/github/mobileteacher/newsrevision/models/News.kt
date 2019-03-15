@@ -1,11 +1,16 @@
 package io.github.mobileteacher.newsrevision.models
 
+import com.google.gson.annotations.SerializedName
+
 class News(var id:String,
            var autor:String,
            var titulo:String,
-           var texto:String,
+           @SerializedName("noticia") var texto:String,
            var informativo:String,
            var data:String)
+
+class NewsResponseObject(@SerializedName("noticias")
+                         var news: List<News>)
 
 
 //{

@@ -9,7 +9,7 @@ import io.github.mobileteacher.newsrevision.models.News
 
 class NewsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    val items = mutableListOf<News>(News("dsds",
+    var items = listOf<News>(News("dsds",
         "Ninja", "Homem pisa em Marte",
         "Sem texto",
         "feito histórico aconteceu no último dia 15",
@@ -17,6 +17,11 @@ class NewsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     //val items2: MutableList<News> = mutableListOf()
 
     override fun getItemCount() = items.size
+
+    fun setData(list: List<News>){
+        items = list
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val card = LayoutInflater.from(parent.context)
