@@ -9,12 +9,8 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import io.github.mobileteacher.newsrevision.api.RetrofitProvider
-import io.github.mobileteacher.newsrevision.models.NewsResponseObject
+import io.github.mobileteacher.newsrevision.adapters.NewsAdapter
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 

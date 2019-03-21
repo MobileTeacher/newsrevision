@@ -60,6 +60,14 @@ class NewsMetaDataFragment : Fragment() {
         date_edittext.setOnClickListener {
             DatePickerFragment().show(childFragmentManager, "DatePicker")
         }
+
+        next_button.setOnClickListener {
+            //TODO: validar o formulário
+
+            addNewsViewModel.incPage()
+        }
+
+
     }
 
     private fun subscribe(){
