@@ -64,6 +64,12 @@ class NewsMetaDataFragment : Fragment() {
         next_button.setOnClickListener {
             //TODO: validar o formulário
 
+            //salvar os dados no ViewModel
+            addNewsViewModel.newsTitle = title_edittext.text.toString()
+            addNewsViewModel.newsInformative = informative_edittext.text.toString()
+            addNewsViewModel.newsAuthor = author_edittext.text.toString()
+
+
             addNewsViewModel.incPage()
         }
 

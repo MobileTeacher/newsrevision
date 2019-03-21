@@ -2,6 +2,9 @@ package io.github.mobileteacher.newsrevision
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.github.mobileteacher.newsrevision.adapters.AddNewsFragmentPagerAdapter
@@ -30,6 +33,24 @@ class AddNewsActivity : AppCompatActivity() {
     private fun subscribe(){
         addNewsViewModel.pageNumber.observe(this, Observer {
             view_pager.currentItem = it
+        })
+
+        addNewsViewModel.errorMessage.observe(this, Observer {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        })
+
+        addNewsViewModel.isLoading.observe(this, Observer {
+            if(it){
+                add_news_progressbar.visibility = VISIBLE
+            } else {
+                add_news_progressbar.visibility = GONE
+            }
+        })
+
+        addNewsViewModel.shouldFinish.observe(this, Observer {
+            if(it){
+                finish()
+            }
         })
     }
 
