@@ -40,7 +40,13 @@ class MainActivity : AppCompatActivity() {
 
         news_list.layoutManager = StaggeredGridLayoutManager(columns,
             StaggeredGridLayoutManager.VERTICAL)//LinearLayoutManager(this)
-        news_list.adapter = NewsAdapter()
+
+        news_list.adapter = NewsAdapter{news->
+            startActivity(Intent(this,
+                NewsDetailActivity::class.java).apply {
+                putExtra(NEWS_EXTRA, news)
+            })
+        }
         newsViewModel.getData()
     }
 

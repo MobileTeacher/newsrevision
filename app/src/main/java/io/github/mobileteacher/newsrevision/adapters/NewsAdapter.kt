@@ -8,7 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import io.github.mobileteacher.newsrevision.R
 import io.github.mobileteacher.newsrevision.models.News
 
-class NewsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class NewsAdapter(val onItemClick: ((news: News)->Unit)? = null):
+            RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+
+
 
     var items = listOf<News>(News("dsds",
         "Ninja", "Homem pisa em Marte",
@@ -43,9 +47,17 @@ class NewsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
     inner class NewsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+
         val titleTextView = itemView.findViewById<TextView>(R.id.titulo_textview)
         val informativeTextView = itemView.findViewById<TextView>(R.id.informativo_textview)
         val authorTextView = itemView.findViewById<TextView>(R.id.autor_textview)
         val dateTextview = itemView.findViewById<TextView>(R.id.data_textview)
+
+        init {
+            itemView.setOnClickListener {
+                val news = items[adapterPosition]
+                onItemClick?.invoke(news)
+            }
+        }
     }
 }

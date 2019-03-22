@@ -1,16 +1,19 @@
 package io.github.mobileteacher.newsrevision.models
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 @Entity
 class News(var autor:String,
            var titulo:String,
            @SerializedName("noticia") var texto:String,
            var informativo:String,
            var data:String,
-           @PrimaryKey var id:String="")
+           @PrimaryKey var id:String=""): Parcelable
 
 class NewsResponseObject(@SerializedName("noticias")
                          var news: List<News>)
