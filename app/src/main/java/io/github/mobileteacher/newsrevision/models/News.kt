@@ -1,13 +1,16 @@
 package io.github.mobileteacher.newsrevision.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Entity
 class News(var autor:String,
            var titulo:String,
            @SerializedName("noticia") var texto:String,
            var informativo:String,
            var data:String,
-           var id:String="")
+           @PrimaryKey var id:String="")
 
 class NewsResponseObject(@SerializedName("noticias")
                          var news: List<News>)

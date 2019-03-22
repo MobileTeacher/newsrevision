@@ -1,5 +1,7 @@
 package io.github.mobileteacher.newsrevision
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.github.mobileteacher.newsrevision.api.RetrofitProvider
@@ -9,7 +11,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AddNewsViewModel: ViewModel() {
+class AddNewsViewModel(application: Application): AndroidViewModel(application) {
     val date = MutableLiveData<String>()
     val pageNumber = MutableLiveData<Int>().apply { value = 0 }
 
@@ -22,6 +24,7 @@ class AddNewsViewModel: ViewModel() {
     val isLoading = MutableLiveData<Boolean>().apply { value = false }
     val shouldFinish = MutableLiveData<Boolean>()
 
+    val repository = NewsRepository(application.applicationContext)
 
     fun postNews(){
         val newsDate = date.value ?: ""
@@ -32,22 +35,29 @@ class AddNewsViewModel: ViewModel() {
             newsDate)
 
         isLoading.value = true
-        val call = RetrofitProvider.newsAPI.createNews(news)
-        call.enqueue(object : Callback<News> {
-            override fun onFailure(call: Call<News>, t: Throwable) {
-                errorMessage.value = t.message
-                isLoading.value = false
-            }
-
-            override fun onResponse(call: Call<News>, response: Response<News>) {
-                if (response.isSuccessful){
-                    errorMessage.value = "Notícia adicionada com sucesso"
-                    isLoading.value = false
-                    shouldFinish.value = true
-                }
-            }
-
+        repository.insertNews(news, {
+            isLoading.value = false
+            shouldFinish.value = true
+        }, {
+            isLoading.value = false
         })
+
+//        val call = RetrofitProvider.newsAPI.createNews(news)
+//        call.enqueue(object : Callback<News> {
+//            override fun onFailure(call: Call<News>, t: Throwable) {
+//                errorMessage.value = t.message
+//                isLoading.value = false
+//            }
+//
+//            override fun onResponse(call: Call<News>, response: Response<News>) {
+//                if (response.isSuccessful){
+//                    errorMessage.value = "Notícia adicionada com sucesso"
+//                    isLoading.value = false
+//                    shouldFinish.value = true
+//                }
+//            }
+//
+//        })
     }
 
     fun incPage(){
